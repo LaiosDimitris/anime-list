@@ -1,3 +1,4 @@
+import googlesearch
 from bs4 import BeautifulSoup
 import requests
 import json
@@ -50,7 +51,15 @@ class GogoanimeParser:
         except Exception as httpGetRequestError:
             print(f'Failed to make GET request to {self.__websiteUrl}/category/{animeTitle}')
             print(httpGetRequestError)
+            try:
+                return self.__searchGoogleForValidUrl(animeTitle)
+            except Exception as googleParsingException:
+                pass
             return None
+
+    def __searchGoogleForValidUrl(self, animeTitle: str):
+        for url in googlesearch.search(f'gogoanime.ai {animeTitle}', stop=1):
+            return requests.get(url)
 
     def __requestIsSuccessful(self, response, animeTitle: str):
         if response == None:
