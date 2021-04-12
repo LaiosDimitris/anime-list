@@ -56,7 +56,7 @@ class GogoanimeParser:
             print(httpGetRequestError)
             return None
 
-    def searchGoogleForValidUrl(self, animeTitle: str):
+    def __searchGoogleForValidUrl(self, animeTitle: str):
         for url in googlesearch.search(f'gogoanime.ai {animeTitle}', stop=1):
             return requests.get(url).url
 
