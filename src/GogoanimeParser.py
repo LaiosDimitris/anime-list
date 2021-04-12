@@ -47,19 +47,18 @@ class GogoanimeParser:
     def __makeGetRequest(self, animeTitle: str):
         try:
             # Url format example: https://gogoanime.ai/category/shingeki-no-kyojin
-            return requests.get(f"{self.__websiteUrl}/category/{animeTitle}")
+            response = requests.get(f"{self.__websiteUrl}/category/{animeTitle}")
+            if response.status_code == 404:
+                return self.__searchGoogleForValidUrl(animeTitle)
+            return response
         except Exception as httpGetRequestError:
             print(f'Failed to make GET request to {self.__websiteUrl}/category/{animeTitle}')
             print(httpGetRequestError)
-            try:
-                return self.__searchGoogleForValidUrl(animeTitle)
-            except Exception as googleParsingException:
-                pass
             return None
 
-    def __searchGoogleForValidUrl(self, animeTitle: str):
+    def searchGoogleForValidUrl(self, animeTitle: str):
         for url in googlesearch.search(f'gogoanime.ai {animeTitle}', stop=1):
-            return requests.get(url)
+            return requests.get(url).url
 
     def __requestIsSuccessful(self, response, animeTitle: str):
         if response == None:
@@ -91,3 +90,5 @@ class GogoanimeParser:
             return None
         else:
             return lastEpisode
+
+print(GogoanimeParser().searchGoogleForValidUrl('fluorites eyes'))
