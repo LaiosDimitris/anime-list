@@ -90,5 +90,3 @@ class GogoanimeParser:
             return None
         else:
             return lastEpisode
-
-print(GogoanimeParser().searchGoogleForValidUrl('fluorites eyes'))
