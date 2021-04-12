@@ -58,7 +58,7 @@ class GogoanimeParser:
 
     def __searchGoogleForValidUrl(self, animeTitle: str):
         for url in googlesearch.search(f'gogoanime.ai {animeTitle}', stop=1):
-            return requests.get(url).url
+            return requests.get(url)
 
     def __requestIsSuccessful(self, response, animeTitle: str):
         if response == None:
