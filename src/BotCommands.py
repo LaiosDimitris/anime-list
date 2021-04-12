@@ -92,11 +92,15 @@ class BotCommands:
                         animeLatestEpisode = self.animeApi.getLatestEpisode(anime['title'])
                         if animeLatestEpisode != anime['currentEpisode']:
                             notifications.append(self.__notificationInfo(server['name'], anime, animeLatestEpisode))
-                            if animeLatestEpisode == anime['episodes']:
+                            if anime['episodes'] == None:
+                                numOfEpisodes = self.animeApi.getInfo(anime['title'])['episodes']
+                                animeDatabase['servers'][serverIndex]['anime'][animeIndex]['episodes'] = numOfEpisodes
+                                self.__updateLatestEpisode(animeDatabase)
+                            if animeLatestEpisode == numOfEpisodes:
                                 self.__removeFinishedAnime(server['name'], anime['title'])
                             else:
                                 animeDatabase['servers'][serverIndex]['anime'][animeIndex]['currentEpisode'] = animeLatestEpisode
-                                self.__updateLatestEpisode(animeDatabase)         
+                                self.__updateLatestEpisode(animeDatabase)
             if len(notifications) == 0:
                 await asyncio.sleep(120)
                 continue
